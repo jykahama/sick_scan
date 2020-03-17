@@ -5,13 +5,13 @@
   xmlns:xacro="http://ros.org/wiki/xacro">
 
 
-  <xacro:macro name="sick_lms_5xx" params="name ros_topic">
-    <xacro:sick_lms_5 name="${name}" ros_topic="${ros_topic}"
+  <xacro:macro name="sick_lms_5xx" params="name ros_topic visualize update_rate">
+    <xacro:sick_lms_5 name="${name}" ros_topic="${ros_topic}" visualize="${visualize}" update_rate="${update_rate}"
       length="0.159277" width="0.155002" height="0.196397" mass="3.7" x_offset="0.079205" z_offset="-0.053449"
       min_range="1.0" max_range="80.0"/>
   </xacro:macro>
 
-  <xacro:macro name="sick_lms_5" params="name ros_topic length width height mass x_offset z_offset min_range max_range">
+  <xacro:macro name="sick_lms_5" params="name ros_topic visualize update_rate length width height mass x_offset z_offset min_range max_range">
     <link name="${name}_mount_link">
       <visual>
         <geometry>
@@ -49,25 +49,30 @@
           iyy="0.000001" iyz="0.0" izz="0.000001" />
       </inertial>
     </link>
-    <xacro:sick_lms_5_laser_gazebo_v0 name="${name}" link="${name}_laser" ros_topic="${ros_topic}" update_rate="50.0" min_angle="-1.65806" max_angle="1.65806" min_range="${min_range}" max_range="${max_range}"/>
+    <xacro:sick_lms_5_laser_gazebo_v0 name="${name}" link="${name}_laser" ros_topic="${ros_topic}" visualize="${visualize}" update_rate="${update_rate}" min_angle="-1.65806" max_angle="1.65806" min_range="${min_range}" max_range="${max_range}"/>
   </xacro:macro>
 
-  <xacro:macro name="sick_lms_5_laser_gazebo_v0" params="name link ros_topic update_rate min_angle max_angle min_range max_range">
+  <xacro:macro name="sick_lms_5_laser_gazebo_v0" params="name link ros_topic visualize update_rate min_angle max_angle min_range max_range">
     <gazebo reference="${link}">
       <material value="Gazebo/Blue" />
       <sensor type="ray" name="${name}">
         <always_on>true</always_on>
         <update_rate>${update_rate}</update_rate>
         <pose>0 0 0 0 0 0</pose>
-        <visualize>false</visualize>
+        <visualize>${visualize}</visualize>
         <ray>
           <scan>
             <horizontal>
-              <samples>380</samples>
+              <samples>191</samples>
               <resolution>1</resolution>
               <min_angle>${min_angle}</min_angle>
               <max_angle>${max_angle}</max_angle>
             </horizontal>
+            <vertical>
+              <samples>1</samples>
+              <min_angle>0</min_angle>
+              <max_angle>0</max_angle>
+            </vertical>
           </scan>
           <range>
             <min>${min_range}</min>
@@ -77,7 +82,7 @@
         </ray>
         <plugin name="gazebo_ros_${name}_controller" filename="libgazebo_ros_laser.so">
           <gaussianNoise>0.005</gaussianNoise>
-          <alwaysOn>true</alwaysOn>
+          <alwaysOn>1</alwaysOn>
           <updateRate>${update_rate}</updateRate>
           <topicName>${ros_topic}</topicName>
           <frameName>${link}</frameName>
