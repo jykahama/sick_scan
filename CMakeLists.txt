@@ -200,6 +200,8 @@ target_link_libraries(sick_scan_test
 # INCLUDE for Includes
 # SHARE for config files, launch files etc.
 
+add_executable(lms5xx_simulator_if simulator_if/src/lms5xx_simulator_if.cpp)
+target_link_libraries(lms5xx_simulator_if ${catkin_LIBRARIES} sick_scan_lib)
 
 install(TARGETS sick_scan_lib
     DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})

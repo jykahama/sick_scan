@@ -797,5 +797,61 @@ std::string convertRxBufferToString(UINT8* buffer, UINT16 bufferLen)
 	return result;
 }
 
+bool findFrameInReceiveBuffer(UINT8* recBuf, UINT32* bytesInRecBuf, UINT32* frameLen)
+{
+	*frameLen = 0;
+	UINT32 i;
+
+	//
+	// COLA-A
+	//
+	// Must start with STX (0x02)
+	if (recBuf[0] != 0x02)
+	{
+		// Look for starting STX (0x02)
+		for (i = 1; i < *bytesInRecBuf; i++)
+		{
+			if (recBuf[i] == 0x02)
+			{
+				break;
+			}
+		}
+
+		// Found beginning of frame?
+		if (i >= *bytesInRecBuf)
+		{
+			// No start found, everything can be discarded
+			*bytesInRecBuf = 0; // Invalidate buffer
+			return false; // No frame found
+		}
+
+		// Move frame start to index 0
+		UINT32 newLen = *bytesInRecBuf - i;
+		memmove(&(recBuf[0]), &(recBuf[i]), newLen);
+		*bytesInRecBuf = newLen;
+	}
+
+	// Look for ending ETX (0x03)
+	for (i = 1; i < *bytesInRecBuf; i++)
+	{
+		if (recBuf[i] == 0x03)
+		{
+			break;
+		}
+	}
+
+	// Found end?
+	if (i >= *bytesInRecBuf)
+	{
+		// No end marker found, so it's not a complete frame (yet)
+		return false; // No frame found
+	}
+
+	// Calculate frame length in byte
+	*frameLen = i + 1;
+
+	return true;
+}
+
 
 } // END namespace colaa

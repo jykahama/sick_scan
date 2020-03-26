@@ -20,6 +20,41 @@ namespace colaa
 // typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
 // typedef boost::char_separator<char> separator_type;
 
+const std::string EVENTNAME_SUBSCRIBE_EVALCASES("LFErec");
+const std::string EVENTNAME_SUBSCRIBE_SCANS("LMDscandata");
+const std::string METHODNAME_LOGIN("SetAccessMode");
+const std::string METHODNAME_LOGOUT("Run");
+const std::string METHODNAME_SET_SCANCONFIG("mLMPsetscancfg");
+const std::string METHODNAME_START_MEASURE("LMCstartmeas");
+const std::string METHODNAME_STOP_MEASURE("LMCstopmeas");
+const std::string METHODNAME_STORE_PARAMETERS_PERMANENT("mEEwriteall");
+const std::string VARIABLENAME_SCANCONFIG("LMPscancfg");
+const std::string VARIABLENAME_DATAOUTPUTRANGE("LMPoutputRange");
+const std::string VARIABLENAME_SCANDATACONFIG("LMDscandatacfg");
+const std::string VARIABLENAME_DEVICEIDENT("DeviceIdent");
+const std::string VARIABLENAME_DEVICESTATUS("STlms");
+// sopas commands
+const std::string COMMAND_Read_Variable_ByIndex("RI");
+const std::string COMMAND_Write_Variable_ByIndex("WI");
+const std::string COMMAND_Invoke_Method_ByIndex("MI");
+const std::string COMMAND_Method_Result_ByIndex("AI");
+const std::string COMMAND_Register_Event_ByIndex("EI");
+const std::string COMMAND_Send_Event_ByIndex("SI"); // receive data event
+
+const std::string COMMAND_Read_Variable_Answer("RA");
+const std::string COMMAND_Write_Variable_Answer("WA");
+const std::string COMMAND_Invoke_Method_Answer("MA");
+const std::string COMMAND_Method_Result_Answer("AA");
+const std::string COMMAND_Register_Event_Answer("EA");
+const std::string COMMAND_Event_Acknowledge("SA");
+
+const std::string COMMAND_Read_Variable_ByName("RN");
+const std::string COMMAND_Write_Variable_ByName("WN");
+const std::string COMMAND_Invoke_Method_ByName("MN");
+const std::string COMMAND_Method_Result_ByName("AN");
+const std::string COMMAND_Register_Event_ByName("EN");
+const std::string COMMAND_Send_Event_ByName("SN"); // receive data event
+
 UINT16 getValueOfChar(UINT8 c);
 UINT8 nibbleToAscii(UINT8 value);
 
@@ -53,6 +88,7 @@ UINT8 decodeUINT8(std::string* rxData);
 UINT32 decodeXByte(std::string* rxData, UINT16 len);
 std::string decodeString(std::string* rxData, UINT16 len = 0);
 std::string convertRxBufferToString(UINT8* buffer, UINT16 bufferLen);
+bool findFrameInReceiveBuffer(UINT8* recBuf, UINT32* bytesInRecBuf, UINT32* frameLen);
 
 /// set of more efficient functions that do not copy strings (should be prefered in use together with the colaa::tokenizer)
 double decodeReal(const std::string& rxData);
