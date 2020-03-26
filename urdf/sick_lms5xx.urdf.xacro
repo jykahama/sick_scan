@@ -81,6 +81,7 @@
           </range>
         </ray>
         <plugin name="gazebo_ros_${name}_controller" filename="libgazebo_ros_laser.so">
+          <robotNamespace>$(arg robotName)</robotNamespace>
           <gaussianNoise>0.005</gaussianNoise>
           <alwaysOn>1</alwaysOn>
           <updateRate>${update_rate}</updateRate>
